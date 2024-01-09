@@ -4,6 +4,7 @@ void main() {
   runApp(const MyApp());
 }
 
+//yamybad
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
