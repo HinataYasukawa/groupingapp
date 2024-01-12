@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'dart:math';
 
 // pathで与えられたファイルを読み込む関数
 List<List<String>> read_file(String path) {
@@ -38,9 +39,30 @@ List<List<String>> replace_row_column(List<List<String>> data) {
   return (ret);
 }
 
-// n人をtarget個のグループにランダムに割り振る関数
+// target人をgroup個のグループにランダムに割り振る関数
+List<int> do_random_grouping(int target, int group) {
+  var rand = Random();
+  List<int> ret = [];
+
+  // 一時的に1~groupの番号を割り振る
+  int cnt = 1;
+  for (int i = 0; i < target; i++) {
+    ret.add(cnt);
+    cnt = (cnt % group) + 1;
+  }
+  // 場所を入れ替えてランダムっぽくする
+  int max_swap = 10000;
+  for (int i = 0; i < max_swap; i++) {
+    int tmp, i1 = rand.nextInt(target), i2 = rand.nextInt(target);
+    tmp = ret[i1];
+    ret[i1] = ret[i2];
+    ret[i2] = tmp;
+  }
+  return ret;
+}
 
 void main() {
-  final csv = read_file('TestFile.csv');
-  print(csv);
+  /*final csv = read_file('TestFile.csv');
+  print(csv);*/
+  print(do_random_grouping(10, 3));
 }
