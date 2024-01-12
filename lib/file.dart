@@ -1,33 +1,35 @@
 import 'dart:io';
-import 'dart:async';
 import 'dart:convert';
 
 // pathで与えられたファイルを読み込む関数
-Future<List<List>> read_file(String path) async {
+List<List<String>> read_file(String path) {
   final String importPath = path;
-  final File importFile = File(importPath);
-  List<List> importList = [];
+  final File file = File(importPath);
+  List<List<String>> ret = [];
 
-  Stream fread = importFile.openRead();
+  try {
+    // 同期的にファイルを文字列として読み込む
+    final lines = LineSplitter.split(file.readAsStringSync());
 
-  // Read lines one by one, and split each ','
-  await fread.transform(utf8.decoder).transform(LineSplitter()).listen(
-    (String line) {
-      importList.add(line.split(','));
-    },
-  ).asFuture();
-
-  return Future<List<List>>.value(importList);
+    for (final line in lines) {
+      ret.add(line.split(','));
+    }
+    return ret;
+  } catch (e) {
+    print('エラー：$e');
+    return [];
+  }
 }
 
 // 行と列を入れ替える関数
-Future<List<List>> replace_row_column(List<List> data) async {
+List<List<String>> replace_row_column(List<List<String>> data) {
   int col_len = data.length;
   if (col_len <= 0) {
-    return Future<List<List>>.value(data);
+    return data;
   }
   int row_len = data[0].length;
-  List<List> ret = List.generate(row_len, (index) => List.filled(col_len, ''));
+  List<List<String>> ret =
+      List.generate(row_len, (index) => List.filled(col_len, ''));
   for (int i = 0; i < col_len; i++) {
     for (int j = 0; j < row_len; j++) {
       ret[j][i] = data[i][j];
@@ -36,9 +38,9 @@ Future<List<List>> replace_row_column(List<List> data) async {
   return (ret);
 }
 
-void main() async {
-  final csv = await read_file('TestFile.csv');
+// n人をtarget個のグループにランダムに割り振る関数
+
+void main() {
+  final csv = read_file('TestFile.csv');
   print(csv);
-  final csv2 = await replace_row_column(csv);
-  print(csv2);
 }
