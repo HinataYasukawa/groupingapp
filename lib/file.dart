@@ -68,8 +68,15 @@ List<int> do_random_grouping(int target, int group) {
   return ret;
 }
 
+List<int> do_cluster_analysis(List<List<int>> data, int group) {
+  // ここでpythonを呼び出してクラスター分析を実施
+  // List<int> res = execute(ClusterAnalysis.py); <- ここ嘘なので直して
+  // return res;
+  return [];
+}
+
 void main() {
-  /*final csv = read_file('TestFile.csv');
-  print(csv);*/
-  print(do_random_grouping(10, 3));
+  final csv = read_file('TestFile.csv');
+  print(csv);
+  /*print(do_random_grouping(10, 3));*/
 }
