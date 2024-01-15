@@ -39,17 +39,24 @@ List<List<String>> replace_row_column(List<List<String>> data) {
   return (ret);
 }
 
-// target人をgroup個のグループにランダムに割り振る関数
-List<int> do_random_grouping(int target, int group) {
-  var rand = Random();
+// target人に対して、前から順に1~groupの番号を割り振る関数
+List<int> do_order_grouping(int target, int group) {
   List<int> ret = [];
-
-  // 一時的に1~groupの番号を割り振る
   int cnt = 1;
   for (int i = 0; i < target; i++) {
     ret.add(cnt);
     cnt = (cnt % group) + 1;
   }
+  return ret;
+}
+
+// target人をgroup個のグループにランダムに割り振る関数
+List<int> do_random_grouping(int target, int group) {
+  var rand = Random();
+  List<int> ret;
+
+  // 一時的に1~groupの番号を割り振る
+  ret = do_order_grouping(target, group);
   // 場所を入れ替えてランダムっぽくする
   int max_swap = 10000;
   for (int i = 0; i < max_swap; i++) {
