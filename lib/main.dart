@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main(){
   runApp(MyApp());
 }
 
+//アプリを実行する関数
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   final title = 'Grouping App';
@@ -18,12 +20,13 @@ class MyApp extends StatelessWidget {
           title: Text(this.title),
           
         ),
-        body: MainScreen()
+        body: RandomScreen1()
       ),
     );
   }
 }
 
+//アプリのメイン画面
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -32,6 +35,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -90,8 +94,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
+//ランダムでグループ分けをする前に必要事項を入力する画面
 class RandomScreen1 extends StatefulWidget {
-  const RandomScreen1({super.key});
+  const RandomScreen1({Key? key}) : super(key: key);
 
   @override
   State<RandomScreen1> createState() => _RandomScreen1State();
@@ -100,37 +105,63 @@ class RandomScreen1 extends StatefulWidget {
 class _RandomScreen1State extends State<RandomScreen1> {
   get textChanged => null;
 
+  final controller = TextEditingController();
+
   @override
-  Widget build(BuildContext cotext) {
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
+      appBar: AppBar(
         title: Text('Random')
-        ),
+      ),
       body: Container(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Row(
+             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text('人数'),
-                TextField(
-                  onChanged: textChanged,
-                  controller: TextEditingController(),
-                  style: TextStyle(
-                    fontSize: 28.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Roboto"
+                SizedBox(
+                  width:200,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: '人数を入力',
                     ),
                   ),
+                ),
               ]
             ),
-
-            ],
-          )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('グループ数'),
+                SizedBox(
+                  width:200,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'グループ数を入力',
+                    ),
+                  ),
+                ),
+              ]
+            ),
+            ElevatedButton(
+                onPressed: pressedExe, 
+                child: Text('実行')
+            ),
+          ],
         )
-      );
+      ),
+    );
+  }
+
+  void pressedExe(){
+    print("pressed 実行!");
   }
 }
