@@ -13,7 +13,8 @@ class ApproximationScreen extends StatefulWidget {
 class _AverageScreenState extends State<ApproximationScreen> {
   get textChanged => null;
 
-  final controller = TextEditingController();
+  final controller1 = TextEditingController();
+  final controller2 = TextEditingController();
 
   File? file;//読み込んだファイルを格納する
   String fileName = '';//読み込んだファイル名を格納する
@@ -59,10 +60,27 @@ class _AverageScreenState extends State<ApproximationScreen> {
                 SizedBox(
                   width:200,
                   child: TextField(
-                    controller: controller,
+                    controller: controller1,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'グループ数を入力',
+                    ),
+                  ),
+                ),
+              ]
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('変数の数'),
+                SizedBox(
+                  width:200,
+                  child: TextField(
+                    controller: controller2,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: '変数の数を入力',
                     ),
                   ),
                 ),
@@ -80,13 +98,15 @@ class _AverageScreenState extends State<ApproximationScreen> {
 
   void pressedExe(){
     print("pressed 実行!");
-    int group = int.parse(controller.text);
-    print('グループ数: $group');
+    int group = int.parse(controller1.text);
+    int variable = int.parse(controller2.text);
+    print('グループ数: $group, 変数の数: $variable');
   }
 
 //テキストフィールドの入力を削除する関数
   void dispose(){
-    controller.dispose();
+    controller1.dispose();
+    controller2.dispose();
     super.dispose();
   }
 
