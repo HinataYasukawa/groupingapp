@@ -252,12 +252,23 @@ List<int> do_nearing_grouping(int target, List<List<int>> data, int group) {
   // 実際にグループ分けしていく
 }
 
-// 特徴量dataを基にクラスター数groupでクラスター分析を行う関数
-List<int> do_cluster_analysis(List<List<int>> data, int group) {
-  // ここでpythonを呼び出してクラスター分析を実施
-  // List<int> res = execute(ClusterAnalysis.py); <- ここ嘘なので直して
-  // return res;
-  return [];
+Future<List<int>> do_cluster_analysis(List<List<int>> data, int group) async {
+  // Pythonスクリプトのパス
+  const pythonScript = 'ClusterAnalysis.py';
+
+  // Pythonに渡すデータをJSON形式に変換
+  var dataJson = jsonEncode({'data': data, 'group': group});
+
+  // Pythonスクリプトを実行
+  var result = await Process.run('python', [pythonScript, dataJson]);
+  if (result.exitCode != 0) {
+    throw Exception('Python script did not execute successfully');
+  }
+
+  // 結果を解析
+  var output = jsonDecode(result.stdout) as List<dynamic>;
+  return output.map<int>((e) => e as int).toList();
+  print(output);
 }
 
 // クラスター番号ごとにリストを分ける関数
