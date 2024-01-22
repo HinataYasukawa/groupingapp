@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:groupingapp/AverageScreen.dart';
+import 'package:groupingapp/BalancedScreen.dart';
+import 'package:groupingapp/BalancedScreen.dart';
 import 'package:groupingapp/RandomScreen.dart';
 
 void main(){
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
           centerTitle: true,
           
         ),
-        body: AverageScreen()
+        body: BalancedScreen()
       ),
     );
   }

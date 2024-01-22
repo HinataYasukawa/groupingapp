@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 
+import 'package:groupingapp/file.dart';
+
 class RandomScreen1 extends StatefulWidget {
   const RandomScreen1({Key? key}) : super(key: key);
 
@@ -76,6 +78,7 @@ class _RandomScreen1State extends State<RandomScreen1> {
     int count = int.parse(controller1.text);
     int group = int.parse(controller2.text);
     print('人数: $count, グループ数: $group');
+    select_random_grouping(count, group);
   }
 
 //テキストフィールドの入力を削除する関数
