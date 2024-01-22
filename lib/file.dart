@@ -400,6 +400,41 @@ dynamic calc_cluster_distance(List<dynamic> data1, List<dynamic> data2) {
   return ret;
 }
 
+/* GUI側から呼び出す関数群 */
+void select_random_grouping(String file_path, int target, int group) {
+  List<int> res = do_random_grouping(target, group);
+  // 結果を表示
+  for (int i = 0; i < res.length; i++) {
+    int pr1 = i + 1, pr2 = res[i];
+    print("$pr1: グループ$pr2");
+  }
+  return;
+}
+
+void select_ballance_grouping(String file_path, int group) {
+  List<List<dynamic>> data = format_data(read_file(file_path));
+  int target = data.length;
+  List<int> res = do_balance_grouping(target, data, group);
+  // 結果を表示
+  for (int i = 0; i < res.length; i++) {
+    int pr1 = i + 1, pr2 = res[i];
+    print("$pr1: グループ$pr2");
+  }
+  return;
+}
+
+void select_nearing_grouping(String file_path, int group) {
+  List<List<dynamic>> data = format_data(read_file(file_path));
+  int target = data.length;
+  List<int> res = do_nearing_grouping(target, data, group);
+  // 結果を表示
+  for (int i = 0; i < res.length; i++) {
+    int pr1 = i + 1, pr2 = res[i];
+    print("$pr1: グループ$pr2");
+  }
+  return;
+}
+
 void main() {
   final csv = read_file('TestFile.csv');
   print(csv);
