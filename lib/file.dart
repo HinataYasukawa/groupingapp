@@ -350,24 +350,76 @@ Future<List<int>> do_nearing_grouping(
   return convert_cluster_to_list(target, ret);
 }
 
-// Pythonを呼び出してクラスター分析を行う関数
+class Point {
+  final double x, y;
+
+  Point(this.x, this.y);
+
+  double distanceTo(Point other) {
+    return sqrt(pow(x - other.x, 2) + pow(y - other.y, 2));
+  }
+}
+
 Future<List<int>> do_cluster_analysis(
     List<List<dynamic>> data, int group) async {
-  // Pythonスクリプトのパス
-  const pythonScript = 'ClusterAnalysis.py';
+  // データポイントをPointオブジェクトに変換
+  List<Point> points = data
+      .map((e) => Point((e[0] is int) ? e[0].toDouble() : e[0],
+          (e[1] is int) ? e[1].toDouble() : e[1]))
+      .toList();
 
-  // Pythonに渡すデータをJSON形式に変換
-  var dataJson = jsonEncode({'data': data, 'group': group});
-
-  // Pythonスクリプトを実行
-  var result = await Process.run('python', [pythonScript, dataJson]);
-  if (result.exitCode != 0) {
-    throw Exception('Python script did not execute successfully');
+  if (points.isEmpty || group <= 0) {
+    return [];
   }
 
-  // 結果を解析
-  var output = jsonDecode(result.stdout) as List<dynamic>;
-  return output.map<int>((e) => e as int).toList();
+  // 初期クラスターの中心をランダムに選択
+  var centroids = List<Point>.from(points)..shuffle();
+  centroids = centroids.take(group).toList();
+
+  List<int> labels;
+  bool hasChanged;
+
+  do {
+    hasChanged = false;
+    labels = List.filled(points.length, 0);
+
+    // 各ポイントを最も近いセントロイドに割り当てる
+    for (var i = 0; i < points.length; i++) {
+      var minDist = double.infinity;
+      for (var j = 0; j < group; j++) {
+        var dist = points[i].distanceTo(centroids[j]);
+        if (dist < minDist) {
+          minDist = dist;
+          labels[i] = j;
+        }
+      }
+    }
+
+    // クラスターの中心を更新
+    for (var i = 0; i < group; i++) {
+      var centroidPoints = <Point>[];
+      for (var j = 0; j < points.length; j++) {
+        if (labels[j] == i) {
+          centroidPoints.add(points[j]);
+        }
+      }
+
+      if (centroidPoints.isNotEmpty) {
+        var newX = centroidPoints.map((p) => p.x).reduce((a, b) => a + b) /
+            centroidPoints.length;
+        var newY = centroidPoints.map((p) => p.y).reduce((a, b) => a + b) /
+            centroidPoints.length;
+        var newCentroid = Point(newX, newY);
+
+        if (newCentroid.distanceTo(centroids[i]) > 0.001) {
+          centroids[i] = newCentroid;
+          hasChanged = true;
+        }
+      }
+    }
+  } while (hasChanged);
+
+  return labels;
 }
 
 // クラスター番号ごとにリストを分ける関数
