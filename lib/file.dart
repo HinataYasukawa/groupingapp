@@ -274,8 +274,7 @@ Future<List<int>> do_balance_grouping(
     // まだ割り振れていない人がいるなら割り振る
     for (int i = 0; i < overflow_member.get_member_cnt(); i++) {
       ret[(shift + i) % group]
-          .add_member_by_id(overflow_member.get_first_member());
-      overflow_member.remove_first_member();
+          .add_member_by_id(overflow_member.get_member_by_index(i));
     }
   }
   return convert_cluster_to_list(target, ret);
@@ -309,15 +308,14 @@ Future<List<int>> do_nearing_grouping(
     remain_cluster.add(i);
   }
   int now_cls = 0;
-  for (int i = 0; i < group - 1; i++) {
-    // 最後に残るクラスターは除外
-    // Queueに挿入
-    add_order.addAll(cluster[now_cls].get_member());
+  // Queueに挿入
+  add_order.addAll(cluster[now_cls].get_member());
+  for (int i = 1; i < group; i++) {
     // 次に挿入するクラスターを決定
     dynamic min_r = calc_cluster_distance(
         data[cluster[now_cls].get_first_member()],
         data[cluster[remain_cluster[0]].get_first_member()]);
-    int next_cls = remain_cluster[0];
+    int next_cls = 0;
     for (int j = 1; j < remain_cluster.length; j++) {
       // i = 0は初期値
       // それぞれのクラスターに属する人の距離を算出
@@ -327,14 +325,15 @@ Future<List<int>> do_nearing_grouping(
       // クラスター間の最小距離が更新可能か確かめる
       if (min_r > r) {
         min_r = r;
-        next_cls = remain_cluster[j];
+        next_cls = j;
       }
     }
     // 挿入するクラスターを更新
     now_cls = next_cls;
+    // Queueに挿入
+    add_order.addAll(cluster[remain_cluster[now_cls]].get_member());
+    remain_cluster.removeAt(now_cls);
   }
-  // 最後に一つだけクラスターが残るのでQueueに挿入
-  add_order.addAll(cluster[now_cls].get_member());
   // Queueに挿入された順番でグループ分けしていく
   for (int i = 0; i < target % group; i++) {
     // neces+1人のグループを作る
@@ -411,7 +410,7 @@ void select_random_grouping(int target, int group) {
   // 結果を表示
   for (int i = 0; i < res.length; i++) {
     int pr1 = i + 1, pr2 = res[i];
-    print("$pr1: グループ$pr2");
+    print("$pr1: Group$pr2");
   }
   return;
 }
@@ -423,7 +422,7 @@ Future<void> select_ballance_grouping(String file_path, int group) async {
   // 結果を表示
   for (int i = 0; i < res.length; i++) {
     int pr1 = i + 1, pr2 = res[i];
-    print("$pr1: グループ$pr2");
+    print("$pr1: Group$pr2");
   }
   return;
 }
@@ -435,11 +434,11 @@ Future<void> select_nearing_grouping(String file_path, int group) async {
   // 結果を表示
   for (int i = 0; i < res.length; i++) {
     int pr1 = i + 1, pr2 = res[i];
-    print("$pr1: グループ$pr2");
+    print("$pr1: Group$pr2");
   }
   return;
 }
 
 void main() {
-  select_ballance_grouping("TestFile.csv", 3);
+  select_nearing_grouping("TestFile.csv", 5);
 }
