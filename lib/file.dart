@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'dart:math';
 
+// リストをシャッフルするときに使う，シャッフル回数
 const int SHUFFLE_NUM = 10000;
 
 class Cluster {
@@ -102,9 +103,9 @@ List<List<String>> read_file(String path) {
   List<List<String>> ret = [];
 
   try {
-    // 同期的にファイルを文字列として読み込む
+    // ファイルを文字列として読み込む
     final lines = LineSplitter.split(file.readAsStringSync());
-
+    // カンマで区切る
     for (final line in lines) {
       ret.add(line.split(','));
     }
@@ -116,7 +117,53 @@ List<List<String>> read_file(String path) {
 }
 
 // 文字列データである特徴量群dataについて、整数型or浮動小数点型の特徴量群に整形する関数
-List<List<dynamic>> format_data(List<List<String>> data) {}
+List<List<dynamic>> format_data(List<List<String>> data) {
+  List<List<dynamic>> ret = [];
+  // データの項目名があるなら削除する（データが全て文字列型）
+  int init_index = 1, data_col = data[0].length;
+  for (int i = 0; i < data_col; i++) {
+    int? i_val = int.tryParse(data[0][i]);
+    double? d_val = double.tryParse(data[0][i]);
+    if (i_val != null || d_val != null) {
+      // 整数型や浮動小数点型で扱えるデータが含まれているなら削除しないように設定
+      init_index = 0;
+    }
+  }
+  // retの初期化
+  int target = data.length - init_index;
+  for (int i = 0; i < target; i++) {
+    ret.add([]);
+  }
+  // データの整形を開始
+  for (int i = 0; i < data_col; i++) {
+    // 文字列データに対応するための準備
+    Map<String, int> str_cnt = Map();
+    for (int j = 0; j < target; j++) {
+      if (str_cnt.containsKey(data[init_index + j][i])) {
+        str_cnt[data[init_index + j][i]] =
+            str_cnt[data[init_index + j][i]]! + 1;
+      } else {
+        str_cnt[data[init_index + j][i]] = 1;
+      }
+    }
+    // 実際にデータをリスト化していく
+    for (int j = 0; j < target; j++) {
+      int? i_val = int.tryParse(data[init_index + j][i]);
+      double? d_val = double.tryParse(data[init_index + j][i]);
+      if (i_val != null) {
+        // 整数型で扱えるデータ
+        ret[j].add(int.parse(data[init_index + j][i]));
+      } else if (d_val != null) {
+        // 浮動小数点型で扱えるデータ
+        ret[j].add(double.parse(data[init_index + j][i]));
+      } else {
+        // 文字列型で扱うデータは事前に準備した出現回数を使う
+        ret[j].add(str_cnt[data[init_index + j][i]]);
+      }
+    }
+  }
+  return ret;
+}
 
 // 行と列を入れ替える関数
 List<List<String>> replace_row_column(List<List<String>> data) {
