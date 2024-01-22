@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:groupingapp/ApproximationScreen.dart';
 import 'package:groupingapp/BalancedScreen.dart';
-import 'package:groupingapp/BalancedScreen.dart';
+import 'package:groupingapp/MainScreen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:groupingapp/RandomScreen.dart';
 
 void main(){
@@ -10,22 +12,36 @@ void main(){
 
 //アプリを実行する関数
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp({super.key});
   final title = 'Grouping App';
+  final router = GoRouter(
+    initialLocation: '/Main',
+    routes: [
+      GoRoute(
+        path: '/Main',
+        builder: (context, state) => MainScreen()
+      ),
+      GoRoute(
+        path: '/Random',
+        builder: (context, state) => RandomScreen(),
+      ),
+      GoRoute(
+        path: '/Balanced',
+        builder: (context, state) => BalancedScreen(),
+      ),
+      GoRoute(
+        path: '/Approximation',
+        builder: (context,state) => ApproximationScreen(),
+      )
+    ]
+  );
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: this.title,
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.cyan[700],
-          title: Text(this.title),
-          centerTitle: true,
-          
-        ),
-        body: BalancedScreen()
-      ),
+    return MaterialApp.router(
+      routeInformationProvider: router.routeInformationProvider,
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
     );
   }
 }

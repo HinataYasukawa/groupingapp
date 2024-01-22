@@ -24,6 +24,7 @@ class _AverageScreenState extends State<BalancedScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.cyan[700],
         title: Text('Balanced'),
         centerTitle: true,
       ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:groupingapp/file.dart';
 
 class ApproximationScreen extends StatefulWidget {
   const ApproximationScreen({Key? key}) : super(key: key);
@@ -16,13 +17,14 @@ class _AverageScreenState extends State<ApproximationScreen> {
   final controller1 = TextEditingController();
   final controller2 = TextEditingController();
 
-  File? file;//読み込んだファイルを格納する
+  late String file;//読み込んだファイルを格納する
   String fileName = '';//読み込んだファイル名を格納する
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.cyan[700],
         title: Text('Approximation'),
         centerTitle: true,
       ),
@@ -101,6 +103,7 @@ class _AverageScreenState extends State<ApproximationScreen> {
     int group = int.parse(controller1.text);
     int variable = int.parse(controller2.text);
     print('グループ数: $group, 変数の数: $variable');
+    select_nearing_grouping(file, group);
   }
 
 //テキストフィールドの入力を削除する関数
@@ -117,7 +120,7 @@ class _AverageScreenState extends State<ApproximationScreen> {
     if(result != null){
       setState((){
         fileName = result.files.single.name;
-        file = File(result.files.single.path!);
+        file = result.files.single.path!;
       });
     }else{
       setState((){

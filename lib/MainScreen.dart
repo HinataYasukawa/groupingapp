@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 //アプリのメイン画面
 class MainScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.cyan[700],
         title: const Text('Grouping App'),
         centerTitle: true,
       ),
@@ -33,7 +35,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ElevatedButton(
                 onPressed: pressedB, 
-                child: const Text('Average')
+                child: const Text('Balanced')
                 ),
               ElevatedButton(
                 onPressed: pressedC, 
@@ -58,13 +60,16 @@ class _MainScreenState extends State<MainScreen> {
 
   void pressedA(){
     print('pressed Random!');
+    context.push('/Random');
   }
 
   void pressedB(){
-    print('pressed Average!');
+    print('pressed Balanced!');
+    context.push('/Balanced');
   }
 
   void pressedC(){
     print('pressed Approximation!');
+    context.push('/Approximation');
   }
 }

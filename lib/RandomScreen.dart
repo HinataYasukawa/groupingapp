@@ -3,14 +3,14 @@ import 'dart:io';
 
 import 'package:groupingapp/file.dart';
 
-class RandomScreen1 extends StatefulWidget {
-  const RandomScreen1({Key? key}) : super(key: key);
+class RandomScreen extends StatefulWidget {
+  const RandomScreen({Key? key}) : super(key: key);
 
   @override
-  State<RandomScreen1> createState() => _RandomScreen1State();
+  State<RandomScreen> createState() => _RandomScreen1State();
 }
 
-class _RandomScreen1State extends State<RandomScreen1> {
+class _RandomScreen1State extends State<RandomScreen> {
   get textChanged => null;
 
   final controller1 = TextEditingController();
@@ -20,6 +20,7 @@ class _RandomScreen1State extends State<RandomScreen1> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.cyan[700],
         title: Text('Random'),
         centerTitle: true,
       ),
