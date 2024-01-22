@@ -62,6 +62,7 @@ class Cluster {
     // indexは0-indexとする
     if (index < member_cnt) {
       member.removeAt(index);
+      member_cnt--;
       return true;
     } else {
       return false;
@@ -405,7 +406,7 @@ dynamic calc_cluster_distance(List<dynamic> data1, List<dynamic> data2) {
 }
 
 /* GUI側から呼び出す関数群 */
-void select_random_grouping(String file_path, int target, int group) {
+void select_random_grouping(int target, int group) {
   List<int> res = do_random_grouping(target, group);
   // 結果を表示
   for (int i = 0; i < res.length; i++) {
@@ -440,7 +441,5 @@ Future<void> select_nearing_grouping(String file_path, int group) async {
 }
 
 void main() {
-  final csv = read_file('TestFile.csv');
-  print(csv);
-  /*print(do_random_grouping(10, 3));*/
+  select_ballance_grouping("TestFile.csv", 3);
 }
