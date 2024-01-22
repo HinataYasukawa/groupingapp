@@ -211,10 +211,12 @@ List<int> do_random_grouping(int target, int group) {
 }
 
 // 特徴量dataを基にクラスター分析を行い、そこからグループごとの能力が均等になるように割り振る関数
-List<int> do_balance_grouping(int target, List<List<dynamic>> data, int group) {
-  // クラスター分析の結果を取得（グループごとに別のリストに格納）
+Future<List<int>> do_balance_grouping(
+    int target, List<List<dynamic>> data, int group) async {
+  List<int> cluster_analysis_result =
+      await do_cluster_analysis(data, group); // awaitを追加
   List<List<int>> analysis_result =
-      divide_member_by_group(do_cluster_analysis(data, group), group);
+      divide_member_by_group(cluster_analysis_result, group);
   // 結果をClusterクラスに落とし込む
   List<Cluster> cluster = [];
   for (int i = 0; i < group; i++) {
@@ -279,10 +281,12 @@ List<int> do_balance_grouping(int target, List<List<dynamic>> data, int group) {
 }
 
 // 特徴量dataを基にクラスター分析を行い、そこからメンバーの能力が近くなるように割り振る関数
-List<int> do_nearing_grouping(int target, List<List<dynamic>> data, int group) {
+Future<List<int>> do_nearing_grouping(
+    int target, List<List<dynamic>> data, int group) async {
+  List<int> cluster_analysis_result = await do_cluster_analysis(data, group);
   // クラスター分析の結果を取得（グループごとに別のリストに格納）
   List<List<int>> analysis_result =
-      divide_member_by_group(do_cluster_analysis(data, group), group);
+      divide_member_by_group(cluster_analysis_result, group);
   // 結果をClusterクラスに落とし込む
   List<Cluster> cluster = [];
   for (int i = 0; i < group; i++) {
@@ -411,10 +415,10 @@ void select_random_grouping(String file_path, int target, int group) {
   return;
 }
 
-void select_ballance_grouping(String file_path, int group) {
+Future<void> select_ballance_grouping(String file_path, int group) async {
   List<List<dynamic>> data = format_data(read_file(file_path));
   int target = data.length;
-  List<int> res = do_balance_grouping(target, data, group);
+  List<int> res = await do_balance_grouping(target, data, group);
   // 結果を表示
   for (int i = 0; i < res.length; i++) {
     int pr1 = i + 1, pr2 = res[i];
@@ -423,10 +427,10 @@ void select_ballance_grouping(String file_path, int group) {
   return;
 }
 
-void select_nearing_grouping(String file_path, int group) {
+Future<void> select_nearing_grouping(String file_path, int group) async {
   List<List<dynamic>> data = format_data(read_file(file_path));
   int target = data.length;
-  List<int> res = do_nearing_grouping(target, data, group);
+  List<int> res = await do_nearing_grouping(target, data, group);
   // 結果を表示
   for (int i = 0; i < res.length; i++) {
     int pr1 = i + 1, pr2 = res[i];
