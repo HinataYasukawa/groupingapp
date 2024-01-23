@@ -457,17 +457,17 @@ dynamic calc_cluster_distance(List<dynamic> data1, List<dynamic> data2) {
 }
 
 /* GUI側から呼び出す関数群 */
-void select_random_grouping(int target, int group) {
+List<int> select_random_grouping(int target, int group) {
   List<int> res = do_random_grouping(target, group);
   // 結果を表示
   for (int i = 0; i < res.length; i++) {
     int pr1 = i + 1, pr2 = res[i];
     print("$pr1: Group$pr2");
   }
-  return;
+  return res;
 }
 
-Future<void> select_ballance_grouping(String file_path, int group) async {
+Future<List<int>> select_ballance_grouping(String file_path, int group) async {
   List<List<dynamic>> data = format_data(read_file(file_path));
   int target = data.length;
   List<int> res = await do_balance_grouping(target, data, group);
@@ -476,10 +476,10 @@ Future<void> select_ballance_grouping(String file_path, int group) async {
     int pr1 = i + 1, pr2 = res[i];
     print("$pr1: Group$pr2");
   }
-  return;
+  return res;
 }
 
-Future<void> select_nearing_grouping(String file_path, int group) async {
+Future<List<int>> select_nearing_grouping(String file_path, int group) async {
   List<List<dynamic>> data = format_data(read_file(file_path));
   int target = data.length;
   List<int> res = await do_nearing_grouping(target, data, group);
@@ -488,7 +488,7 @@ Future<void> select_nearing_grouping(String file_path, int group) async {
     int pr1 = i + 1, pr2 = res[i];
     print("$pr1: Group$pr2");
   }
-  return;
+  return res;
 }
 
 void main() {

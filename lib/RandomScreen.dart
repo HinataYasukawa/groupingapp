@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-import 'package:groupingapp/file.dart';
+import 'package:groupingapp/clustering.dart';
 
 class RandomScreen extends StatefulWidget {
   const RandomScreen({Key? key}) : super(key: key);
@@ -25,56 +25,50 @@ class _RandomScreen1State extends State<RandomScreen> {
         centerTitle: true,
       ),
       body: Container(
-        alignment: Alignment.topCenter,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('人数'),
-                SizedBox(
-                  width:200,
-                  child: TextField(
-                    controller: controller1,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: '人数を入力',
+          alignment: Alignment.topCenter,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('人数'),
+                    SizedBox(
+                      width: 200,
+                      child: TextField(
+                        controller: controller1,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: '人数を入力',
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ]
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('グループ数'),
-                SizedBox(
-                  width:200,
-                  child: TextField(
-                    controller: controller2,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'グループ数を入力',
+                  ]),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('グループ数'),
+                    SizedBox(
+                      width: 200,
+                      child: TextField(
+                        controller: controller2,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'グループ数を入力',
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ]
-            ),
-            ElevatedButton(
-                onPressed: pressedExe, 
-                child: Text('実行')
-            ),
-          ],
-        )
-      ),
+                  ]),
+              ElevatedButton(onPressed: pressedExe, child: Text('実行')),
+            ],
+          )),
     );
   }
 
-  void pressedExe(){
+  void pressedExe() {
     print("pressed 実行!");
     int count = int.parse(controller1.text);
     int group = int.parse(controller2.text);
@@ -83,7 +77,7 @@ class _RandomScreen1State extends State<RandomScreen> {
   }
 
 //テキストフィールドの入力を削除する関数
-  void dispose(){
+  void dispose() {
     controller1.dispose();
     controller2.dispose();
     super.dispose();
