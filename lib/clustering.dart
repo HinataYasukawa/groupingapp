@@ -214,13 +214,14 @@ List<int> do_random_grouping(int target, int group) {
 // 特徴量dataを基にクラスター分析を行い、そこからグループごとの能力が均等になるように割り振る関数
 Future<List<int>> do_balance_grouping(
     int target, List<List<dynamic>> data, int group) async {
+  int cls_num = target ~/ group;
   List<int> cluster_analysis_result =
-      await do_cluster_analysis(data, group); // awaitを追加
+      await do_cluster_analysis(data, cls_num); // awaitを追加
   List<List<int>> analysis_result =
-      divide_member_by_group(cluster_analysis_result, group);
+      divide_member_by_group(cluster_analysis_result, cls_num);
   // 結果をClusterクラスに落とし込む
   List<Cluster> cluster = [];
-  for (int i = 0; i < group; i++) {
+  for (int i = 0; i < cls_num; i++) {
     Cluster tmp = Cluster();
     tmp.add_member_by_list(analysis_result[i]);
     cluster.add(tmp);
@@ -235,7 +236,7 @@ Future<List<int>> do_balance_grouping(
   int shift = 0;
   Cluster overflow_member = Cluster();
   Queue<int> remain_cluster = Queue();
-  for (int i = 0; i < group; i++) {
+  for (int i = 0; i < cls_num; i++) {
     cluster[i].shuffle_member(); // 一旦シャッフル
     if (cluster[i].get_member_cnt() >= group) {
       while (cluster[i].get_member_cnt() >= group) {
@@ -492,5 +493,5 @@ Future<List<int>> select_nearing_grouping(String file_path, int group) async {
 }
 
 void main() {
-  select_nearing_grouping("TestFile.csv", 5);
+  select_ballance_grouping("TestFile.csv", 7);
 }
