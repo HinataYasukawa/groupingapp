@@ -24,7 +24,7 @@ class _MainScreenState extends State<MainScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Text('説明'),
+            Text('このサイトはグループ分けをするためのサイトです。\n全体の人数および、各グループの人数を指定し、ランダムにグループ分け、csvファイルを読み込ませることで実力に近い順でグループ分け、実力が均等になるようにグループ分けをする三つのグループ分けの方法があります。\n人数が多い場合は、グループ分けに時間がかかることがありますのでご容赦ください。'),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.max,

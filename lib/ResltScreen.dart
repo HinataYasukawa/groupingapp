@@ -18,15 +18,44 @@ class ResultScreen extends ConsumerWidget {
       body: SingleChildScrollView( 
         child: Container(
           alignment: Alignment.topCenter,
+          padding: EdgeInsets.all(30.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.max,
-            children: list.map((item) => TextField(
-              controller: TextEditingController(text: item.toString()),
-            )).toList()
+            children: [
+              Text(toStringByGroup(list))
+            ]
           ),
         ),
       ),
-    );;
+    );
+  }
+
+  String toStringByIndividual(List<int> list){
+    String str = '';
+    for(int i = 0; i < list.length; i++){
+      final p = list[i];
+      str += '$i: Group$p\n';
+    }
+    return str;
+  }
+
+  String toStringByGroup(List<int> list){
+    String str = '';
+    int count = 0;
+    for(int i = 1; i < list.length; i++){
+      if(count < list.length){
+        str += 'Group $i\n';
+      }
+      for(int j = 0; j < list.length; j++){
+        if(list[j] == i){
+          int k = j + 1;
+          str += '$k\n';
+          count++;
+        }
+      }
+      str += '\n';
+    }
+    return str;
   }
 }

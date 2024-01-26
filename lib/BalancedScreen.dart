@@ -2,7 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:groupingapp/ResltScreen.dart';
 import 'package:groupingapp/clustering.dart';
+import 'package:groupingapp/main.dart';
 
 class BalancedScreen extends StatefulWidget {
   const BalancedScreen({Key? key}) : super(key: key);
@@ -17,7 +21,7 @@ class _AverageScreenState extends State<BalancedScreen> {
   final controller1 = TextEditingController();
   final controller2 = TextEditingController();
 
-  late String file; //読み込んだファイルパスを格納する
+  String file = ''; //読み込んだファイルパスを格納する
   String fileName = ''; //読み込んだファイル名を格納する
 
   @override
@@ -82,18 +86,27 @@ class _AverageScreenState extends State<BalancedScreen> {
                       ),
                     ),
                   ]),
-              ElevatedButton(onPressed: pressedExe, child: Text('実行')),
+                Consumer(builder: (context, ref, child){
+                  return ElevatedButton(onPressed: () async {
+                    final notifier = ref.read(listProvider.notifier);
+                    print("pressed 実行!");
+                    int group = int.parse(controller1.text);
+                    int variable = int.parse(controller2.text);
+                    print('グループ数: $group, 変数の数: $variable');
+                    notifier.state = await select_ballance_grouping(file, group);
+                    context.push('/Result');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ResultScreen(),
+                      )
+                    );
+                  }, child: Text('実行'));
+                })
+              
             ],
           )),
     );
-  }
-
-  void pressedExe() {
-    print("pressed 実行!");
-    int group = int.parse(controller1.text);
-    int variable = int.parse(controller2.text);
-    print('グループ数: $group, 変数の数: $variable');
-    select_ballance_grouping(file, group);
   }
 
 //テキストフィールドの入力を削除する関数
