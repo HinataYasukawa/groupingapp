@@ -19,7 +19,6 @@ class _AverageScreenState extends State<BalancedScreen> {
   get textChanged => null;
 
   final controller1 = TextEditingController();
-  final controller2 = TextEditingController();
 
   String file = ''; //読み込んだファイルパスを格納する
   String fileName = ''; //読み込んだファイル名を格納する
@@ -70,29 +69,12 @@ class _AverageScreenState extends State<BalancedScreen> {
                       ),
                     ),
                   ]),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('変数の数'),
-                    SizedBox(
-                      width: 200,
-                      child: TextField(
-                        controller: controller2,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: '変数の数を入力',
-                        ),
-                      ),
-                    ),
-                  ]),
                 Consumer(builder: (context, ref, child){
                   return ElevatedButton(onPressed: () async {
                     final notifier = ref.read(listProvider.notifier);
                     print("pressed 実行!");
                     int group = int.parse(controller1.text);
-                    int variable = int.parse(controller2.text);
-                    print('グループ数: $group, 変数の数: $variable');
+                    print('グループ数: $group');
                     notifier.state = await select_ballance_grouping(file, group);
                     context.push('/Result');
                     Navigator.push(
@@ -112,7 +94,6 @@ class _AverageScreenState extends State<BalancedScreen> {
 //テキストフィールドの入力を削除する関数
   void dispose() {
     controller1.dispose();
-    controller2.dispose();
     super.dispose();
   }
 

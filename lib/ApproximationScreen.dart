@@ -2,7 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:groupingapp/ResltScreen.dart';
 import 'package:groupingapp/clustering.dart';
+import 'package:groupingapp/main.dart';
 
 class ApproximationScreen extends StatefulWidget {
   const ApproximationScreen({Key? key}) : super(key: key);
@@ -15,7 +19,6 @@ class _AverageScreenState extends State<ApproximationScreen> {
   get textChanged => null;
 
   final controller1 = TextEditingController();
-  final controller2 = TextEditingController();
 
   late String file; //読み込んだファイルを格納する
   String fileName = ''; //読み込んだファイル名を格納する
@@ -51,55 +54,47 @@ class _AverageScreenState extends State<ApproximationScreen> {
                         ))
                   ]),
               Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('グループ数'),
-                    SizedBox(
-                      width: 200,
-                      child: TextField(
-                        controller: controller1,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'グループ数を入力',
-                        ),
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('グループ数'),
+                  SizedBox(
+                    width: 200,
+                    child: TextField(
+                      controller: controller1,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'グループ数を入力',
                       ),
                     ),
-                  ]),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('変数の数'),
-                    SizedBox(
-                      width: 200,
-                      child: TextField(
-                        controller: controller2,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: '変数の数を入力',
-                        ),
-                      ),
-                    ),
-                  ]),
-              ElevatedButton(onPressed: pressedExe, child: Text('実行')),
+                  ),
+                ]),
+              Consumer(builder: (context, ref, child){
+                return ElevatedButton(onPressed: () async {
+                  final notifier = ref.read(listProvider.notifier);
+                print("pressed 実行!");
+                int group = int.parse(controller1.text);
+                print('グループ数: $group');
+                notifier.state = await select_nearing_grouping(file, group);
+                context.push('/Result');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ResultScreen(),
+                  )
+                );
+              }, child: Text('実行'));
+              })
             ],
           )),
     );
   }
 
-  void pressedExe() {
-    print("pressed 実行!");
-    int group = int.parse(controller1.text);
-    int variable = int.parse(controller2.text);
-    print('グループ数: $group, 変数の数: $variable');
-    select_nearing_grouping(file, group);
-  }
+
 
 //テキストフィールドの入力を削除する関数
   void dispose() {
     controller1.dispose();
-    controller2.dispose();
     super.dispose();
   }
 
