@@ -28,6 +28,9 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  file_saver:
+  path_provider:
+  csv:
   flutter_riverpod:
   go_router:
   file_picker:
@@ -39,6 +42,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  permission_handler: ^11.2.0
 
 dev_dependencies:
   flutter_test:
