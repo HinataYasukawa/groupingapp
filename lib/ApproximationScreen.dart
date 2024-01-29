@@ -28,7 +28,12 @@ class _AverageScreenState extends State<ApproximationScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.cyan[700],
-        title: Text('Approximation'),
+        title: Text(
+          'Approximation',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Container(

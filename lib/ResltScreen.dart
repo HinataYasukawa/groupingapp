@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:groupingapp/main.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,50 +23,69 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.cyan[700],
-        title: const Text('Result'),
+        title: const Text(
+          'Result',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView( 
         child: Container(
           alignment: Alignment.topCenter,
           padding: EdgeInsets.all(30.0),
-          child: Column(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.max,
             children: [
-              Text('Order by No. : Order by Group'),
-              Switch(value: listview,
-              onChanged: (value){
-                setState((){
-                  listview = value;
-                });
-              }),
               Text(
                 listview ? toStringByGroup(list) : toStringByIndividual(list),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: listview ? toStringByGroup(list) : toStringByIndividual(list)));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Copied to clipboard')),
-                  );
-                },
-                child: Text('Copy to clipboard'),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  String csvData = listview ? toCsvByGroup(list) : toCsvByIndividual(list);
-                  final directory = await getApplicationDocumentsDirectory();
-                  final pathOfTheFileToWrite = directory.path + "/myCsvFile.csv";
-                  File file = File(pathOfTheFileToWrite);
-                  file.writeAsString(csvData);
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Order by No. : Order by Group'),
+                  Switch(value: listview,
+                  onChanged: (value){
+                    setState((){
+                      listview = value;
+                    });
+                  }),
+                  Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(30.0),
+                  child:
+                  ElevatedButton(
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: listview ? toStringByGroup(list) : toStringByIndividual(list)));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Copied to clipboard')),
+                      );
+                    },
+                    child: Text('Copy to clipboard'),
+                  )),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(30.0),
+                    child:
+                    ElevatedButton(
+                    onPressed: () async {
+                      String csvData = listview ? toCsvByGroup(list) : toCsvByIndividual(list);
+                      final directory = await getApplicationDocumentsDirectory();
+                      final pathOfTheFileToWrite = directory.path + "/myCsvFile.csv";
+                      File file = File(pathOfTheFileToWrite);
+                      file.writeAsString(csvData);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('CSV file saved to $pathOfTheFileToWrite')),
-                  );
-                },
-                child: Text('Save to CSV'),
-              )
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('CSV file saved to $pathOfTheFileToWrite')),
+                      );
+                    },
+                    child: Text('Save to CSV'),
+                  ))
+                ],
+              ),
             ]
           ),
         ),
@@ -77,7 +97,8 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     String str = '';
     for(int i = 0; i < list.length; i++){
       final p = list[i];
-      str += '$i: Group$p\n';
+      int j  = i + 1;
+      str += '$j: Group$p\n';
     }
     return str;
   }
@@ -86,7 +107,8 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     String str = '';
     for(int i = 0; i < list.length; i++){
       final p = list[i];
-      str += '$i,Group$p\n';
+      int j = i + 1;
+      str += '$j,Group$p\n';
     }
     return str; 
   }
@@ -94,16 +116,21 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
   String toStringByGroup(List<int> list){
     String str = '';
     int count = 0;
-    for(int i = 1; i < list.length; i++){
+    int flag = 0;
+    for(int i = 1; i <= list.length; i++){
       for(int j = 0; j < list.length; j++){
         if(list[j] == i){
           if(count < list.length){
             str += 'Group $i: ';
+            flag++;
           }
           int k = j + 1;
           str += '$k\n';
           count++;
         }
+      }
+      if(flag < list.length){
+        str += '\n';
       }
     }
     return str;
@@ -111,16 +138,21 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
   String toCsvByGroup(List<int> list){
     String str = '';
     int count = 0;
-    for(int i = 1; i < list.length; i++){
+    int flag = 0;
+    for(int i = 1; i <= list.length; i++){
       for(int j = 0; j < list.length; j++){
         if(list[j] == i){
           if(count < list.length){
             str += 'Group $i,';
+            flag++;
           }
           int k = j + 1;
           str += '$k\n';
           count++;
         }
+      }
+      if(flag < list.length){
+        str += '\n';
       }
     }
     return str;

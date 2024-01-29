@@ -28,7 +28,12 @@ class _AverageScreenState extends State<BalancedScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.cyan[700],
-        title: Text('Balanced'),
+        title: Text(
+          'Balanced',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Container(

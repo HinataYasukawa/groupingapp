@@ -16,7 +16,12 @@ class _MainScreenState extends State<MainScreen> {
     return  Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.cyan[700],
-        title: const Text('Grouping App'),
+        title: const Text(
+          'Grouping App',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Container(
@@ -24,34 +29,65 @@ class _MainScreenState extends State<MainScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Text('このサイトはグループ分けをするためのサイトです。\n全体の人数および、各グループの人数を指定し、ランダムにグループ分け、csvファイルを読み込ませることで実力に近い順でグループ分け、実力が均等になるようにグループ分けをする三つのグループ分けの方法があります。\n人数が多い場合は、グループ分けに時間がかかることがありますのでご容赦ください。\n結果はこのサイト上でも確認できますが、csvファイルもダウンロードが可能です。是非ご活用ください。'),
+            Text(
+              'このサイトはグループ分けをするためのサイトです。\n全体の人数および、各グループの人数を指定し、ランダムにグループ分け、csvファイルを読み込ませることで実力に近い順でグループ分け、実力が均等になるようにグループ分けをする三つのグループ分けの方法があります。\n人数が多い場合は、グループ分けに時間がかかることがありますのでご容赦ください。\n結果はこのサイト上でも確認できますが、csvファイルもダウンロードが可能です。是非ご活用ください。',
+              textAlign: TextAlign.center,
+              ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              ElevatedButton(
-                onPressed: pressedA, 
-                child: const Text('Random')
-                ),
-              ElevatedButton(
-                onPressed: pressedB, 
-                child: const Text('Balanced')
-                ),
-              ElevatedButton(
-                onPressed: pressedC, 
-                child: const Text('Approximation')
-                )
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    onPressed: pressedA, 
+                    child: const Text(
+                      'ランダムに\nグループ分け',
+                      textAlign: TextAlign.center,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(200, 50),
+                    )
+                  ),
+                ]
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    onPressed: pressedB, 
+                    child: const Text(
+                      '総合力を均等に\nグループ分け',
+                      textAlign: TextAlign.center,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(200, 50),
+                    )
+                  ),
+                ]
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    onPressed: pressedC, 
+                    child: const Text(
+                      'メンバーの能力を同質に\nグループ分け',
+                      textAlign: TextAlign.center,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(200, 50),
+                    )
+                  ),
+                ],
+              )
+              
               ]
             ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Text('説明:Random'),
-                Text('説明:Average'),
-                Text('説明:Approximation')
-              ]
-            )
           ]
         )
       )

@@ -25,7 +25,12 @@ class _RandomScreen1State extends State<RandomScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.cyan[700],
-        title: Text('Random'),
+        title: Text(
+          'Random',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Container(
