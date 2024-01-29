@@ -78,6 +78,7 @@ class Cluster {
   }
 
   void shuffle_member() {
+    if(member.length == 0) return;
     var rand = Random();
     int i1, i2, tmp;
     for (int i = 0; i < SHUFFLE_NUM; i++) {
@@ -442,7 +443,8 @@ List<int> convert_cluster_to_list(int target, List<Cluster> lis) {
   List<int> ret = List.filled(target, 0); // 0で初期化
   for (int i = 0; i < lis.length; i++) {
     for (int j = 0; j < lis[i].member_cnt; j++) {
-      ret[lis[i].get_member_by_index(j)] = i + 1; // 1-indexに戻す
+      int mem = lis[i].get_member_by_index(j);
+      if(mem >= 0) ret[lis[i].get_member_by_index(j)] = i + 1; // 1-indexに戻す
     }
   }
   return ret;
@@ -493,5 +495,5 @@ Future<List<int>> select_nearing_grouping(String file_path, int group) async {
 }
 
 void main() {
-  select_ballance_grouping("TestFile.csv", 7);
+  select_ballance_grouping("TestFile.csv", 3);
 }
